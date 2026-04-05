@@ -1,0 +1,91 @@
+import {useApp} from '../context/Context'
+
+
+export default function transactions() {
+  const { transaction, filter, setFilter, role } = useApp();
+console.log(transactions);
+
+  const menu = [
+    { id: "all", name: "All" },
+    { id: "income", name: "Income" },
+    { id: "expense", name: "Expense" },
+  ];
+
+
+  const filtered = filter === "all"
+    ? transaction
+    : transaction.filter(t => t.type === filter);
+
+  return (
+    <>
+    <div className="bg-white p-4 mt-4 rounded-xl">
+      <h2 className="font-bold text-xl">Transactions</h2>
+
+      <div className="my-2 flex gap-5 text-black">
+
+        {
+          menu.map((item) => (
+            <button
+              key={item.id}
+              className={`px-3 py-1 rounded cursor-pointer transition all
+              ${filter === item.id ? "bg-green-500"
+                  : "hover:bg-green-700"}`} onClick={() => { setFilter(item.id) }}>{item.name}</button>
+
+          ))
+        }
+      </div>
+
+      {role === "admin" && (
+        <button className="bg-blue-500 rounded-md text-white px-2 py-1">Add</button>
+      )}
+
+      <table className="w-full mt-2 grid-col-4">
+        <thead >
+          <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+
+        <tbody className="text-center ">
+          {filtered.map(t => (
+            <tr key={t.id}>
+              <td>{t.date}</td>
+              <td>₹{t.amount}</td>
+              <td>{t.category}</td>
+              <td>{t.type}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+     {/* <div className='flex items-center justify-between cursor-pointer bg-white p-4 hover:shadow-2xl hover:shadow-zinc-200/80 transition-all duration-100 ease-in rounded-xl '>
+
+            <div className="flex items-center space-x-3">
+
+                <div className="size-9 bg-zinc-200 rounded-full center-item text-xs text-zinc-500 overflow-clip">
+
+                    {src ? (<img src={src} alt='profile image ' className='size-full ' />) : ("DP")}
+                </div>
+
+                <div className="">
+                    <p className='text-sm font-medium text-zinc-900'>
+                        {title}
+                    </p>
+                    <p className="text-xs text-zinc-600">
+                        {subtitle}
+                    </p>
+                </div>
+            </div>
+
+            <span className={`text-sm font-semibold ${valueColor}`}>
+                {value}
+            </span>
+
+        </div> */}
+        </>
+  );
+}
